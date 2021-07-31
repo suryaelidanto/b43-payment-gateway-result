@@ -1,4 +1,6 @@
 const { user, transaction, product, profile } = require("../../models");
+
+// Import midtransClient
 const midtransClient = require("midtrans-client");
 
 exports.getTransactions = async (req, res) => {
@@ -73,6 +75,7 @@ exports.addTransaction = async (req, res) => {
   try {
     let data = req.body;
 
+    // Prepare transaction data
     data = {
       id: parseInt(data.idProduct + Math.random().toString().slice(3, 8)),
       ...data,
@@ -80,9 +83,10 @@ exports.addTransaction = async (req, res) => {
       status: "pending",
     };
 
-    // Insert data to transaction table
+    // Insert transaction data
     const newData = await transaction.create(data);
 
+    // Get buyer data
     const buyerData = await user.findOne({
       include: {
         model: profile,
@@ -157,7 +161,7 @@ core.apiConfig.set({
  * @param {string} status
  * @param {transactionId} transactionId
  */
-const handleTransaction = async (status, transactionId) => {
+const updateTransaction = async (status, transactionId) => {
   await transaction.update(
     {
       status,
@@ -198,19 +202,19 @@ exports.notification = async (req, res) => {
       if (fraudStatus == "challenge") {
         // TODO set transaction status on your database to 'challenge'
         // and response with 200 OK
-        handleTransaction("pending", orderId);
+        updateTransaction("pending", orderId);
         res.status(200);
       } else if (fraudStatus == "accept") {
         // TODO set transaction status on your database to 'success'
         // and response with 200 OK
         updateProduct(orderId);
-        handleTransaction("success", orderId);
+        updateTransaction("success", orderId);
         res.status(200);
       }
     } else if (transactionStatus == "settlement") {
       // TODO set transaction status on your database to 'success'
       // and response with 200 OK
-      handleTransaction("success", orderId);
+      updateTransaction("success", orderId);
       res.status(200);
     } else if (
       transactionStatus == "cancel" ||
@@ -219,12 +223,12 @@ exports.notification = async (req, res) => {
     ) {
       // TODO set transaction status on your database to 'failure'
       // and response with 200 OK
-      handleTransaction("failed", orderId);
+      updateTransaction("failed", orderId);
       res.status(200);
     } else if (transactionStatus == "pending") {
       // TODO set transaction status on your database to 'pending' / waiting payment
       // and response with 200 OK
-      handleTransaction("pending", orderId);
+      updateTransaction("pending", orderId);
       res.status(200);
     }
   } catch (error) {
