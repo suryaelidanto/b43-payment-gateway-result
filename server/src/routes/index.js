@@ -54,7 +54,7 @@ router.delete("/product/:id", auth, deleteProduct);
 router.get("/transactions", auth, getTransactions);
 router.post("/transaction", auth, addTransaction);
 
-router.post("/notification", notification);
+// Create router for notification with POST method here ...
 
 router.get("/categories", getCategories);
 router.get("/category/:id", getCategory);
