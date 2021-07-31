@@ -192,6 +192,8 @@ exports.notification = async (req, res) => {
     const transactionStatus = statusResponse.transaction_status;
     const fraudStatus = statusResponse.fraud_status;
 
+    console.log(statusResponse);
+
     if (transactionStatus == "capture") {
       if (fraudStatus == "challenge") {
         // TODO set transaction status on your database to 'challenge'
