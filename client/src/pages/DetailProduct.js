@@ -72,7 +72,7 @@ export default function DetailProduct() {
 
       // Insert transaction data
       const response = await api.post("/transaction", config);
-      console.log(response);
+
       const token = response.payment.token;
 
       window.snap.pay(token, {

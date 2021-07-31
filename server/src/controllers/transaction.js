@@ -144,6 +144,7 @@ exports.addTransaction = async (req, res) => {
   }
 };
 
+// Configurate midtrans client with CoreApi
 const MIDTRANS_CLIENT_KEY = process.env.MIDTRANS_CLIENT_KEY;
 const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY;
 
@@ -161,33 +162,6 @@ core.apiConfig.set({
  * @param {string} status
  * @param {transactionId} transactionId
  */
-const updateTransaction = async (status, transactionId) => {
-  await transaction.update(
-    {
-      status,
-    },
-    {
-      where: {
-        id: transactionId,
-      },
-    }
-  );
-};
-
-const updateProduct = async (orderId) => {
-  const transactionData = await transaction.findOne({
-    where: {
-      id: orderId,
-    },
-  });
-  const productData = await product.findOne({
-    where: {
-      id: transactionData.idProduct,
-    },
-  });
-  const qty = productData.qty - 1;
-  await product.update({ qty }, { where: { id: productData.id } });
-};
 
 exports.notification = async (req, res) => {
   try {
@@ -235,4 +209,32 @@ exports.notification = async (req, res) => {
     console.log(error);
     res.status(500);
   }
+};
+
+const updateTransaction = async (status, transactionId) => {
+  await transaction.update(
+    {
+      status,
+    },
+    {
+      where: {
+        id: transactionId,
+      },
+    }
+  );
+};
+
+const updateProduct = async (orderId) => {
+  const transactionData = await transaction.findOne({
+    where: {
+      id: orderId,
+    },
+  });
+  const productData = await product.findOne({
+    where: {
+      id: transactionData.idProduct,
+    },
+  });
+  const qty = productData.qty - 1;
+  await product.update({ qty }, { where: { id: productData.id } });
 };
