@@ -54,7 +54,7 @@
 
 API request should be done from merchant backend to acquire Snap transaction token by providing payment information and Server Key. There are at least three components that are required to obtain the Snap token (`server_key`, `order_id`, `gross_amount`)
 
-### Modify transaction controller :
+#### Modify transaction controller :
 
 > File : `server/src/controllers/transactions.js`
 
