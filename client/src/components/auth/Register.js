@@ -54,7 +54,7 @@ export default function Register() {
       console.log(response);
 
       // Notification
-      if (response.status == "success") {
+      if (response.code == 200) {
         const alert = (
           <Alert variant="success" className="py-1">
             Success

@@ -47,14 +47,14 @@ function App() {
       const response = await api.get("/check-auth", config);
 
       // If the token incorrect
-      if (response.status === "failed") {
+      if (response.code != 200) {
         return dispatch({
           type: "AUTH_ERROR",
         });
       }
 
       // // Get user data
-      let payload = response.data.user;
+      let payload = response.data;
       // // Get token from local storage
       payload.token = localStorage.token;
 

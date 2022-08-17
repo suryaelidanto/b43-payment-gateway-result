@@ -122,7 +122,7 @@ export default function UpdateProductAdmin() {
   });
 
   useEffect(() => {
-    const newCategoryId = product?.categories?.map((item) => {
+    const newCategoryId = product?.category?.map((item) => {
       return item.id;
     });
 
