@@ -36,8 +36,8 @@ export default function DetailProduct() {
     try {
       // Get data from product
       const data = {
-        idProduct: product.id,
-        idSeller: product.user.id,
+        productId: product.id,
+        sellerId: product.user.id,
         price: product.price,
       };
 
@@ -58,12 +58,48 @@ export default function DetailProduct() {
       const response = await api.post("/transaction", config);
 
       // Create variabel for store token payment from response here ...
+      console.log("ini response request midtrans", response)
+      const token = response.data.token
+
+      window.snap.pay(token, {
+        onSuccess: function (result) {
+          console.log(result)
+          alert("kamu berhasil membayar! 😎")
+        },
+        onPending: function (result) {
+          console.log(result)
+          alert("kamu pending membayar! 😎")
+        },
+        onError: function (result) {
+          console.log(result)
+          alert("kamu error membayar! 😎")
+        },
+        onClose: function (result) {
+          console.log(result)
+          alert("jangan kabur bayar dulu! 😊")
+        }
+      })
 
       // Init Snap for display payment page with token here ...
     } catch (error) {
       console.log(error);
     }
   });
+
+  useEffect(() => {
+    const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const myMidtransClientKey = "SB-Mid-client-6WbQDjmNTAqTS6KA"
+
+    let scriptTag = document.createElement("script")
+    scriptTag.src = midtransScriptUrl
+
+    scriptTag.setAttribute("data-client-key", myMidtransClientKey)
+    document.body.appendChild(scriptTag)
+
+    return () => {
+      document.body.removeChild(scriptTag)
+    }
+  }, [])
 
   return (
     <div>
